@@ -16,15 +16,5 @@
             </div>
         </div>
     </div>
-    <div *ngIf="teaProducts.length === 0">
-        <p>Загрузка данных...</p>
-    </div>
+    <app-loader *ngIf="isLoading"></app-loader>
 </div>
-
-<!-- <div *ngIf="teaProducts.length > 0">
-    <div *ngFor="let product of teaProducts" class="card">
-        <h3>{{ product.name }}</h3>
-        <p>{{ product.description }}</p>
-        <p>Цена: {{ product.price }}</p>
-    </div>
-</div> -->

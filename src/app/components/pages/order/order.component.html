@@ -52,7 +52,7 @@
                     <label for="comment" class="form-label">Комментарий к заказу</label>
                     <textarea id="comment" class="form-control" formControlName="comment"></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary">Отправить заказ</button>
+                <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">Отправить заказ</button>
             </form>
             <div *ngIf="showSuccessMessage" class="mt-3 alert alert-success">
                 Спасибо за заказ!
