@@ -1,1 +1,13 @@
-<p>product works!</p>
+<div class="container-fluid d-flex flex-column h-100">
+    <div class="row flex-grow-1">
+        <div class="col-md-6 align-self-center">
+            <img src="https://via.placeholder.com/400x300" alt="Product Image" class="img-fluid">
+        </div>
+        <div class="col-md-6 align-self-center">
+            <h2>{{ productName }}</h2>
+            <p class="lead">Цена: $19.99</p>
+            <p>Описание товара: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <button class="btn btn-primary" (click)="buy()">Купить</button>
+        </div>
+    </div>
+</div>
