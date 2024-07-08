@@ -1,52 +1,65 @@
 <div class="container mt-4">
     <div class="row">
-        <div class="col-md-6 offset-md-3">
+        <div class="col-md-6 offset-md-3 pb-5">
             <h2 class="mb-4 text-center">Оформление заказа</h2>
-            <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+            <form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
                 <div class="mb-3">
                     <label for="name" class="form-label">Имя</label>
-                    <input type="text" id="name" class="form-control" formControlName="name" required>
-                    <div *ngIf="formControls['name'].invalid && (formControls['name'].dirty || formControls['name'].touched)"
-                        class="invalid-feedback">
-                        Введите корректное имя
+                    <input type="text" id="name" class="form-control" formControlName="name" required
+                        [ngClass]="{ 'is-invalid': name?.invalid && (name?.dirty || name?.touched) }">
+                    <div *ngIf="name?.invalid && (name?.dirty || name?.touched)" class="invalid-feedback">
+                        {{ name?.errors?.['required'] ? 'Поле обязательно к заполнению' : 'Введите корректное имя' }}
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="lastName" class="form-label">Фамилия</label>
-                    <input type="text" id="lastName" class="form-control" formControlName="lastName" required>
-                    <div *ngIf="formControls['lastName'].invalid && (formControls['lastName'].dirty || formControls['lastName'].touched)"
+                    <label for="last_name" class="form-label">Фамилия</label>
+                    <input type="text" id="last_name" class="form-control" formControlName="last_name" required
+                        [ngClass]="{ 'is-invalid': last_name?.invalid && (last_name?.dirty || last_name?.touched) }">
+                    <div *ngIf="last_name?.invalid && (last_name?.dirty || last_name?.touched)"
                         class="invalid-feedback">
-                        Введите корректную фамилию
+                        {{ last_name?.errors?.['required'] ?
+                        'Поле обязательно к заполнению' :
+                        'Введите корректную фамилию' }}
                     </div>
                 </div>
                 <div class="mb-3">
                     <label for="phone" class="form-label">Телефон</label>
-                    <input type="text" id="phone" class="form-control" formControlName="phone" required>
-                    <div *ngIf="formControls['phone'].invalid && (formControls['phone'].dirty || formControls['phone'].touched)"
-                        class="invalid-feedback">
-                        Введите корректный телефон (11 цифр, включая знак + в начале)
+                    <input type="text" id="phone" class="form-control" formControlName="phone" required
+                        [ngClass]="{ 'is-invalid': phone?.invalid && (phone?.dirty || phone?.touched) }">
+                    <div *ngIf="phone?.invalid && (phone?.dirty || phone?.touched)" class="invalid-feedback">
+                        {{ phone?.errors?.['required'] ?
+                        'Поле обязательно к заполнению' :
+                        'Номер телефона должен быть 11 цифр и начинаться с +' }}
                     </div>
                 </div>
                 <div class="mb-3">
                     <label for="country" class="form-label">Страна</label>
-                    <input type="text" id="country" class="form-control" formControlName="country" required>
+                    <input type="text" id="country" class="form-control" formControlName="country" required
+                        [ngClass]="{ 'is-invalid': country?.invalid && (country?.dirty || country?.touched) }">
+                    <div *ngIf="country?.invalid && (country?.dirty || country?.touched)" class="invalid-feedback">
+                        Поле обязательно к заполнению
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="zip" class="form-label">Индекс</label>
-                    <input type="text" id="zip" class="form-control" formControlName="zip" required>
+                    <input type="text" id="zip" class="form-control" formControlName="zip" required
+                        [ngClass]="{ 'is-invalid': zip?.invalid && (zip?.dirty || zip?.touched) }">
+                    <div *ngIf="zip?.invalid && (zip?.dirty || zip?.touched)" class="invalid-feedback">
+                        Поле обязательно к заполнению
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="address" class="form-label">Адрес</label>
-                    <input type="text" id="address" class="form-control" formControlName="address" required>
-                    <div *ngIf="formControls['address'].invalid && (formControls['address'].dirty || formControls['address'].touched)"
-                        class="invalid-feedback">
-                        Введите корректный адрес
+                    <input type="text" id="address" class="form-control" formControlName="address" required
+                        [ngClass]="{ 'is-invalid': address?.invalid && (address?.dirty || address?.touched) }">
+                    <div *ngIf="address?.invalid && (address?.dirty || address?.touched)" class="invalid-feedback">
+                        Поле обязательно к заполнению
                     </div>
                 </div>
                 <div class="mb-3">
                     <label for="product" class="form-label">Товар</label>
                     <input type="text" id="product" class="form-control" formControlName="product"
-                        [value]="checkoutForm.controls['product'].value" [disabled]="true">
+                        [value]="product?.value">
                 </div>
                 <div class="mb-3">
                     <label for="comment" class="form-label">Комментарий к заказу</label>
@@ -58,7 +71,7 @@
                 Спасибо за заказ!
             </div>
             <div *ngIf="showErrorMessage" class="mt-3 alert alert-danger">
-                Произошла ошибка. Попробуйте еще раз.
+                {{ errorMessage }}
             </div>
         </div>
     </div>

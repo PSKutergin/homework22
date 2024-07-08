@@ -8,3 +8,9 @@ export type OrderType = {
     address: string;
     comment?: string;
 }
+
+
+export type OrderTypeResponse = {
+    success: number;
+    message?: string;
+}

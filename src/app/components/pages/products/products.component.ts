@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductsService } from '../../../services/products.service';
-import { ProductType } from '../../types/ProductType';
+import { ProductType } from '../../../types/ProductType';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-products',
@@ -9,9 +10,9 @@ import { ProductType } from '../../types/ProductType';
 })
 export class ProductsComponent implements OnInit {
   isLoading = false;
-  teaProducts: any[] = [];
+  teaProducts: ProductType[] = [];
 
-  constructor(private productsService: ProductsService) { }
+  constructor(private productsService: ProductsService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
     this.getTeaProducts();
@@ -30,4 +31,8 @@ export class ProductsComponent implements OnInit {
       }
     });
   }
+
+  // openProduct(product: ProductType): void {
+  //   this.router.navigate(['/product', product.id]);
+  // }
 }

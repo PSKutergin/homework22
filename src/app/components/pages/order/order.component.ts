@@ -3,11 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { OrderService } from 'src/app/services/order.service';
-import { OrderType } from '../../types/OrderType';
-
-interface OrderResponse {
-  success: number;
-}
+import { OrderType, OrderTypeResponse } from '../../../types/OrderType';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-order',
@@ -15,13 +12,13 @@ interface OrderResponse {
   styleUrls: ['./order.component.scss']
 })
 export class OrderComponent implements OnInit, OnDestroy {
-  checkoutForm!: FormGroup;
+  orderForm!: FormGroup;
   isFormSubmitted = false;
   showSuccessMessage = false;
   showErrorMessage = false;
-  productName: string = '';
-  isSubmitting = false; // Флаг для управления состоянием кнопки
-  errorMessageTimeout: number | undefined; // Типизированный таймаут для автоматического скрытия ошибки
+  errorMessage: string = '';
+  isSubmitting = false;
+  errorMessageTimeout: number | undefined;
   private queryParamsSubscription: Subscription | undefined;
 
   constructor(
@@ -40,66 +37,109 @@ export class OrderComponent implements OnInit, OnDestroy {
       this.queryParamsSubscription.unsubscribe();
     }
     if (this.errorMessageTimeout) {
-      clearTimeout(this.errorMessageTimeout); // Очистка таймаута при уничтожении компонента
+      clearTimeout(this.errorMessageTimeout);
     }
   }
 
   private initForm(): void {
-    this.checkoutForm = this.fb.group({
+    this.orderForm = this.fb.group({
       name: ['', [Validators.required, Validators.pattern('[a-zA-Zа-яА-ЯёЁ]*')]],
       last_name: ['', [Validators.required, Validators.pattern('[a-zA-Zа-яА-ЯёЁ]*')]],
       phone: ['', [Validators.required, Validators.pattern('^[+]?[0-9]{11}$')]],
-      address: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9\s/-]*')]],
+      address: ['', Validators.required],
       country: ['', Validators.required],
       zip: ['', Validators.required],
-      product: [{ value: '', disabled: true }],
+      product: { value: '', disabled: true },
       comment: ['']
     });
   }
 
   private subscribeToQueryParams(): void {
     this.queryParamsSubscription = this.route.queryParams.subscribe(params => {
-      this.productName = params['product'] || '';
-      this.checkoutForm.patchValue({
-        product: this.productName
+      this.orderForm.patchValue({
+        product: params['product']
       });
     });
   }
 
-  get formControls() {
-    return this.checkoutForm.controls;
+  get name() {
+    return this.orderForm.get('name');
+  };
+
+  get last_name() {
+    return this.orderForm.get('last_name');
+  };
+
+  get phone() {
+    return this.orderForm.get('phone');
+  };
+
+  get address() {
+    return this.orderForm.get('address');
+  };
+
+  get country() {
+    return this.orderForm.get('country');
+  };
+
+  get zip() {
+    return this.orderForm.get('zip');
+  };
+
+  get product() {
+    return this.orderForm.get('product');
+  };
+
+  get comment() {
+    return this.orderForm.get('comment');
+  };
+
+  markAllFieldsAsTouched() {
+    Object.keys(this.orderForm.controls).forEach(key => {
+      const control = this.orderForm.get(key);
+      control?.markAsTouched();
+    });
   }
 
   onSubmit(): void {
     this.isFormSubmitted = true;
-    if (this.checkoutForm.invalid) {
+    this.markAllFieldsAsTouched();
+
+    if (this.orderForm.invalid) {
       return;
     }
 
-    this.isSubmitting = true; // Кнопка становится недоступной
+    this.orderForm.get('product')?.enable();
+    this.isSubmitting = true;
 
-    const formData: OrderType = this.checkoutForm.value;
+    const formData: OrderType = this.orderForm.value;
     this.orderService.placeOrder(formData).subscribe({
-      next: (response: OrderResponse) => {
-        this.isSubmitting = false; // Кнопка снова становится доступной
-        if (response.success === 1) {
+      next: (response: OrderTypeResponse) => {
+        this.isSubmitting = false;
+        if (response.success && !response.message) {
           this.showSuccessMessage = true;
           this.errorMessageTimeout = window.setTimeout(() => {
-            this.showSuccessMessage = false; // Скрыть сообщение об успешном заказе через 3 секунды
+            this.showSuccessMessage = false;
           }, 3000);
+          this.orderForm.reset();
         } else {
+          this.errorMessage = response.message || 'Произошла ошибка. Попробуйте еще раз.';
           this.showErrorMessage = true;
           this.errorMessageTimeout = window.setTimeout(() => {
-            this.showErrorMessage = false; // Скрыть сообщение об ошибке через 3 секунды
+            this.showErrorMessage = false;
           }, 3000);
         }
       },
-      error: (error: any) => {
-        this.isSubmitting = false; // Кнопка снова становится доступной
+      error: (error: HttpErrorResponse) => {
+        this.isSubmitting = false;
+        this.errorMessage = error.message || 'Произошла ошибка. Попробуйте еще раз.';
         this.showErrorMessage = true;
         this.errorMessageTimeout = window.setTimeout(() => {
-          this.showErrorMessage = false; // Скрыть сообщение об ошибке через 3 секунды
+          this.showErrorMessage = false;
         }, 3000);
+      },
+      complete: () => {
+        this.orderForm.get('product')?.disable();
       }
     });
   }
