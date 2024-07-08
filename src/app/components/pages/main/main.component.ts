@@ -18,7 +18,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(private popupService: PopupService, private router: Router) { }
 
   ngOnInit(): void {
-    this.popupService.schedulePopup(10000); // Показываем попап через 10 секунд
+    this.popupService.schedulePopup(10000);
 
     this.popupSubscription = this.router.events.pipe(
       filter(event => event instanceof NavigationStart)

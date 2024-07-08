@@ -17,4 +17,8 @@ export class ProductsService {
   getTeaProductById(id: string): Observable<ProductType> {
     return this.http.get<ProductType>(`https://testologia.ru/tea?id=${id}`);
   }
+
+  getTeaProductsBySearch(query: string): Observable<ProductType[]> {
+    return this.http.get<ProductType[]>(`https://testologia.ru/tea?search=${encodeURIComponent(query)}`);
+  }
 }
