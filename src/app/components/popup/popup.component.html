@@ -1,6 +1,7 @@
-<div *ngIf="showPopup" class="popup-overlay">
+<div *ngIf="showPopup" class="popup-overlay" (click)="onClickOutside($event)">
     <div class="popup">
         <h2>Посмотрите наши чайные коллекции</h2>
+        <button class="btn btn-close" (click)="closePopup()">&times;</button>
         <button class="btn" (click)="navigateToCatalog()">Смотреть</button>
     </div>
 </div>

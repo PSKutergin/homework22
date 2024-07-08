@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { PopupService } from '../../services/popup.service';
 import { Subscription } from 'rxjs';
@@ -27,7 +27,18 @@ export class PopupComponent implements OnInit {
   }
 
   navigateToCatalog(): void {
-    this.popupService.hidePopup();
+    this.closePopup();
     this.router.navigate(['/products']);
+  }
+
+  closePopup(): void {
+    this.popupService.hidePopup();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: Event): void {
+    if ((event.target as HTMLElement).classList.contains('popup-overlay')) {
+      this.closePopup();
+    }
   }
 }

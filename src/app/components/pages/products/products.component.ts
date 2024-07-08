@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductsService } from '../../../services/products.service';
 import { ProductType } from '../../../types/ProductType';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-products',
@@ -26,6 +27,14 @@ export class ProductsComponent implements OnInit {
     });
   }
 
+  get pageTitle(): string {
+    return this.searchQuery ? `Результаты поиска по запросу "${this.searchQuery}"` : 'Наши чайные коллекции';
+  }
+
+  get noResultsMessage(): string {
+    return this.searchQuery && this.teaProducts.length === 0 ? 'Ничего не найдено' : '';
+  }
+
   // Метод для поиска чаев по запросу
   searchTeaProducts(searchTerm: string): void {
     if (!searchTerm.trim()) {
@@ -39,7 +48,7 @@ export class ProductsComponent implements OnInit {
         this.teaProducts = products;
         this.isLoading = false;
       },
-      error: (error: any) => {
+      error: (error: HttpErrorResponse) => {
         console.error('Error searching products:', error);
         this.isLoading = false;
       }
@@ -54,7 +63,7 @@ export class ProductsComponent implements OnInit {
         this.teaProducts = products;
         this.isLoading = false;
       },
-      error: (error: any) => {
+      error: (error: HttpErrorResponse) => {
         console.error('Error loading products:', error);
         this.isLoading = false;
       }

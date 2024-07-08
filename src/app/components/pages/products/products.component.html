@@ -1,6 +1,6 @@
 <div class="container mb-4 pt-5">
     <h3 class="text-center mb-5 wow shake" data-wow-duration="0.15s" data-wow-iteration="5">
-        Наши чайные коллекции
+        {{ pageTitle }}
     </h3>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3" *ngIf="teaProducts.length > 0">
         <div class="col center" *ngFor="let product of teaProducts">
@@ -17,5 +17,10 @@
             </div>
         </div>
     </div>
+
+    <ng-template #noResultsBlock>
+        <p class="text-center mt-4">{{ noResultsMessage }}</p>
+    </ng-template>
+
     <app-loader *ngIf="isLoading"></app-loader>
 </div>
