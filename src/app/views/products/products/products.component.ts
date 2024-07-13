@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductsService } from '../../../services/products.service';
-import { ProductType } from '../../../types/ProductType';
+import { ProductType } from '../../../../types/ProductType';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ProductsService } from 'src/app/shared/services/products.service';
 
 @Component({
   selector: 'app-products',

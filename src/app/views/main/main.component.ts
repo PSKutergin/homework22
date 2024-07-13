@@ -1,11 +1,11 @@
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
-import { PopupComponent } from '../../popup/popup.component';
-import { PopupService } from '../../../services/popup.service';
+import { PopupComponent } from '../popup/popup.component';
 import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import * as $ from 'jquery';
 import 'jquery-ui/ui/widgets/accordion';
+import { PopupService } from 'src/app/shared/services/popup.service';
 
 @Component({
   selector: 'app-main',

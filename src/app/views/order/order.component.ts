@@ -2,9 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { OrderService } from 'src/app/services/order.service';
-import { OrderType, OrderTypeResponse } from '../../../types/OrderType';
 import { HttpErrorResponse } from '@angular/common/http';
+import { OrderService } from 'src/app/shared/services/order.service';
+import { OrderType, OrderTypeResponse } from 'src/types/OrderType';
 
 @Component({
   selector: 'app-order',

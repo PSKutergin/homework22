@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
-import { PopupService } from '../../services/popup.service';
 import { Subscription } from 'rxjs';
+import { PopupService } from 'src/app/shared/services/popup.service';
 
 @Component({
   selector: 'app-popup',
